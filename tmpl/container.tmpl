@@ -193,10 +193,13 @@ nav .classes li:first-child h4, nav .classes li:first-child ul {
     display: block;
 }
 <?js }?>
-nav li[file="<?js=title?>"]:after {
+<?js
+    var file = title.split(".")[0].toLowerCase();
+?>
+nav li[file="<?js=file?>"]:after {
     display: none;
 }
-nav li[file="<?js=title?>"] h4, nav li[file="<?js=title?>"] ul {
+nav li[file="<?js=file?>"] h4, nav li[file="<?js=file?>"] ul {
     display: block;
 }
 </style>

@@ -30,7 +30,11 @@ function tutoriallink(tutorial) {
 }
 
 function getAncestorLinks(doclet) {
-    return helper.getAncestorLinks(data, doclet);
+    var links = helper.getAncestorLinks(data, doclet);
+
+    return links.map(function(link) {
+        return link.replace(/~/g, ".");
+    });
 }
 
 function hashToLink(doclet, hash) {
@@ -211,7 +215,7 @@ function generate(type, title, docs, filename, resolveLinks) {
     var docData = {
         type: type,
         title: title,
-        docs: docs
+        docs: docs,
     };
 
     var outpath = path.join(outdir, filename),
@@ -310,7 +314,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
                 itemsNav += `<li>` + linktoFn('', item.name);
                 itemsNav += '</li>';
             } else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
-                itemsNav += `<li file="${item.name}">` + linktoFn(item.longname, item.name.replace(/^module:/, ''));
+                itemsNav += `<li file="${item.name.toLowerCase()}">` + linktoFn(item.longname, item.name.replace(/^module:/, ''));
 
                 if (members.length) {
                     itemsNav += "<h4>Members</h4>";
