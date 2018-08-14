@@ -3,6 +3,7 @@
     var isGlobalPage;
 
     docs.forEach(function(doc, i) {
+        if (doc.name && i > 0) return;
 ?>
 
 <?js
@@ -138,7 +139,7 @@
         var methods = self.find({kind: 'function', memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
         if (methods && methods.length && methods.forEach) {
     ?>
-        <h3 class="subsection-title">Methods</h3>
+        <h3 class="subsection-title" id="methods">Methods</h3>
 
         <?js methods.forEach(function(m) { ?>
             <?js= self.partial('method.tmpl', m) ?>
@@ -169,7 +170,7 @@
         var events = self.find({kind: 'event', memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
         if (events && events.length && events.forEach) {
     ?>
-        <h3 class="subsection-title">Events</h3>
+        <h3 class="subsection-title" id="events">Events</h3>
 
         <?js events.forEach(function(e) { ?>
             <?js= self.partial('method.tmpl', e) ?>
@@ -181,3 +182,21 @@
 <?js } ?>
 
 <?js }); ?>
+
+
+<style>
+<?js if (title === "Home") {?>
+nav .classes li:first-child:after {
+    display: none;
+}
+nav .classes li:first-child h4, nav .classes li:first-child ul {
+    display: block;
+}
+<?js }?>
+nav li[file="<?js=title?>"]:after {
+    display: none;
+}
+nav li[file="<?js=title?>"] h4, nav li[file="<?js=title?>"] ul {
+    display: block;
+}
+</style>

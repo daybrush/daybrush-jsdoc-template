@@ -10,22 +10,18 @@ html, body {
 }
 
 body {
-  color: #4d4e53;
+  color: #333;
   background-color: white;
   margin: 0 auto;
   padding: 0 20px;
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 16px;
-  line-height: 160%;
-}
-
-img {
-  max-width: 100%;
+  /* line-height: 160%; */
 }
 
 a,
 a:active {
-  color: #606;
+  color: #333;
   text-decoration: none;
 }
 
@@ -84,7 +80,7 @@ h4 {
 
 h4.name {
   color: #fff;
-  background: #6d426d;
+  background: #333;
   box-shadow: 0 .25em .5em #d3d3d3;
   border-top: 1px solid #d3d3d3;
   border-bottom: 1px solid #d3d3d3;
@@ -93,11 +89,11 @@ h4.name {
 }
 
 h4.name a {
-  color: #fc83ff;
+  color: #fff;
 }
 
 h4.name a:hover {
-  border-bottom-color: #fc83ff;
+  border-bottom-color: #fff;
 }
 
 h5, .container-overview .subsection-title {
@@ -161,6 +157,7 @@ nav {
   float: left;
   display: block;
   width: 250px;
+  left: 10px;
   background: #fff;
   overflow: auto;
   position: fixed;
@@ -180,46 +177,74 @@ nav h3 {
 }
 
 nav ul {
-  font-family: 'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
   font-size: 100%;
   line-height: 17px;
   padding: 0;
   margin: 0;
   list-style-type: none;
 }
-
+nav ul a {
+  font-size: 12px;
+}
 nav ul a,
 nav ul a:active {
-  font-family: 'Montserrat', sans-serif;
   line-height: 18px;
   padding: 0;
   display: block;
-  font-size: 12px;
 }
 
-nav a:hover,
-nav a:active {
-  color: #606;
-}
 
 nav > ul {
   padding: 0 10px;
 }
-
-nav > ul > li > a {
-  color: #606;
+nav > ul > li {
+  position: relative;
+  padding: 15px 10px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #ccc;
 }
-
+nav > ul > li > a {
+  font-size: 16px;
+  color: black;
+  font-weight: bold;
+}
+nav .method a, nav .event a {
+  font-family: sans-serif;
+  color: black;
+  font-weight: 600;
+  font-size: 13px;
+}
+nav .method.inherits a {
+  color: #777;
+}
+nav .method.inherits a:after {
+  content: "ⓘ";
+  margin-left: 5px;
+  font-size: 50%;
+  
+}
+nav ul h4, nav ul ul {
+  margin-left: 15px;
+}
 nav ul ul {
   margin-bottom: 10px
 }
-
+nav ul h4 {
+  font-size: 14px;
+  margin-top: 5px;
+  color: black;
+}
+nav ul h4 a, nav ul h4 a:hover, nav ul h4 a:active {
+  color: black;
+  font-size: 14px;
+}
 nav ul ul + ul {
-  margin-top: -10px;
+  /* margin-top: -10px; */
 }
 
 nav ul ul a {
-  color: hsl(207, 1%, 60%);
+  color: #333;
+  font-weight: bold;
   border-left: 1px solid hsl(207, 10%, 86%);
 }
 
@@ -231,13 +256,15 @@ nav ul ul a:active {
 nav h2 {
    font-size: 12px;
    margin: 0;
-   padding: 0;
+   padding: 0px 10px;
 }
 
 nav > h2 > a {
    display: block;
-   margin: 10px 0 -10px;
-   color: #606 !important;
+   margin: 30px 10px 20px;
+   font-size: 16px;
+   font-weight: bold;
+   color: #333 !important;
 }
 
 footer {
@@ -271,7 +298,7 @@ footer {
 }
 
 .type-signature {
-  color: #CA79CA
+  color: #88CCAA;
 }
 
 .type-signature:last-child {
@@ -283,7 +310,7 @@ footer {
 }
 
 .signature {
-    color: #fc83ff;
+  color: #88CCAA;
 }
 
 .details {
@@ -429,6 +456,7 @@ footer {
 }
 
 .params td {
+  font-weight: bold;
    border-top: 1px solid #eee
 }
 
@@ -453,7 +481,7 @@ footer {
 }
 
 span.param-type, .params td .param-type, .param-type dd {
-   color: #606;
+   color: #999;
   font-family: Consolas, Monaco, 'Andale Mono', monospace
 }
 

@@ -296,15 +296,24 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
         items.forEach(function(item) {
             var methods = find({kind:'function', memberof: item.longname});
             var members = find({kind:'member', memberof: item.longname});
+            var events = find({kind:'event', memberof: item.longname});
             var docdash = env && env.conf && env.conf.docdash || {};
 
+
+            if (item.kind === "event") {
+                if (item.inherits) {
+                    return;
+                }
+            }
+
             if ( !hasOwnProp.call(item, 'longname') ) {
-                itemsNav += '<li>' + linktoFn('', item.name);
+                itemsNav += `<li>` + linktoFn('', item.name);
                 itemsNav += '</li>';
             } else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
-                itemsNav += '<li>' + linktoFn(item.longname, item.name.replace(/^module:/, ''));
+                itemsNav += `<li file="${item.name}">` + linktoFn(item.longname, item.name.replace(/^module:/, ''));
 
-                if (docdash.static && members.find(function (m) { return m.scope === 'static'; } )) {
+                if (members.length) {
+                    itemsNav += "<h4>Members</h4>";
                     itemsNav += "<ul class='members'>";
 
                     members.forEach(function (member) {
@@ -318,11 +327,28 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
                 }
 
                 if (methods.length) {
+                    itemsNav += `<h4><a href="${item.longname}.html#methods">Methods</a></h4>`;
                     itemsNav += "<ul class='methods'>";
-
+                    // methods.sort(method => {
+                    //     return method.inherits ? 1 : -1;
+                    // });
                     methods.forEach(function (method) {
-                        itemsNav += "<li data-type='method'>";
+                        itemsNav += `<li data-type='method' class="method ${method.inherits ? "inherits" : ""}">`;
                         itemsNav += linkto(method.longname, method.name);
+                        itemsNav += "</li>";
+                    });
+
+                    itemsNav += "</ul>";
+                }
+                if (events.length) {
+                    itemsNav += `<h4><a href="${item.longname}.html#events">Events</a></h4>`;
+                    itemsNav += "<ul class='events'>";
+                    // methods.sort(method => {
+                    //     return method.inherits ? 1 : -1;
+                    // });
+                    events.forEach(function (event) {
+                        itemsNav += `<li data-type='event' class="event">`;
+                        itemsNav += linkto(event.longname, event.name);
                         itemsNav += "</li>";
                     });
 
@@ -335,7 +361,8 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
         });
 
         if (itemsNav !== '') {
-            nav += '<h3>' + itemHeading + '</h3><ul>' + itemsNav + '</ul>';
+            nav += '<ul class="' + itemHeading.toLowerCase() + '">' + itemsNav + '</ul>';
+            //nav += '<h3>' + itemHeading + '</h3><ul>' + itemsNav + '</ul>';
         }
     }
 
@@ -362,7 +389,6 @@ function linktoExternal(longName, name) {
  * @param {array<object>} members.tutorials
  * @param {array<object>} members.events
  * @param {array<object>} members.interfaces
- * @return {s
  ring} The HTML for the navigation sidebar.
  */
 
@@ -374,30 +400,30 @@ function buildNav(members) {
     nav += buildMemberNav(members.classes, 'Classes', seen, linkto);
     nav += buildMemberNav(members.modules, 'Modules', {}, linkto);
     nav += buildMemberNav(members.externals, 'Externals', seen, linktoExternal);
-    nav += buildMemberNav(members.events, 'Events', seen, linkto);
+    // nav += buildMemberNav(members.events, 'Events', seen, linkto);
     nav += buildMemberNav(members.namespaces, 'Namespaces', seen, linkto);
     nav += buildMemberNav(members.mixins, 'Mixins', seen, linkto);
     nav += buildMemberNav(members.tutorials, 'Tutorials', seenTutorials, linktoTutorial);
     nav += buildMemberNav(members.interfaces, 'Interfaces', seen, linkto);
 
-    if (members.globals.length) {
-        var globalNav = '';
+    // if (members.globals.length) {
+    //     var globalNav = '';
 
-        members.globals.forEach(function(g) {
-            if ( g.kind !== 'typedef' && !hasOwnProp.call(seen, g.longname) ) {
-                globalNav += '<li>' + linkto(g.longname, g.name) + '</li>';
-            }
-            seen[g.longname] = true;
-        });
+    //     members.globals.forEach(function(g) {
+    //         if ( g.kind !== 'typedef' && !hasOwnProp.call(seen, g.longname) ) {
+    //             globalNav += '<li>' + linkto(g.longname, g.name) + '</li>';
+    //         }
+    //         seen[g.longname] = true;
+    //     });
 
-        if (!globalNav) {
-            // turn the heading into a link so you can actually get to the global page
-            nav += '<h3>' + linkto('global', 'Global') + '</h3>';
-        }
-        else {
-            nav += '<h3>Global</h3><ul>' + globalNav + '</ul>';
-        }
-    }
+    //     if (!globalNav) {
+    //         // turn the heading into a link so you can actually get to the global page
+    //         nav += '<h3>' + linkto('global', 'Global') + '</h3>';
+    //     }
+    //     else {
+    //         nav += '<h3>Global</h3><ul>' + globalNav + '</ul>';
+    //     }
+    // }
 
     return nav;
 }
