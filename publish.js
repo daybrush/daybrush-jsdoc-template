@@ -290,7 +290,9 @@ function attachModuleSymbols(doclets, modules) {
         }
     });
 }
-
+function removeExports(name) {
+    return name.replace("exports.", "");
+}
 function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
     var nav = '';
 
@@ -338,7 +340,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
                     // });
                     methods.forEach(function (method) {
                         itemsNav += `<li data-type='method' class="method ${method.inherits ? "inherits" : ""}">`;
-                        itemsNav += linkto(method.longname, method.name);
+                        itemsNav += linkto(method.longname, removeExports(method.name));
                         itemsNav += "</li>";
                     });
 
