@@ -293,6 +293,22 @@ function attachModuleSymbols(doclets, modules) {
 function removeExports(name) {
     return name.replace("exports.", "");
 }
+function buildNavUl(file, header, type, members) {
+    if (!members.length) {
+        return "";
+    }
+    var itemsNav = header ? `<h4><a href="${file}.html#${header.toLowerCase()}">${header}</a></h4>` : "";
+    itemsNav += `<ul class='${header.toLowerCase()}'>`;
+
+    itemsNav += members.map(function (member) {
+        // if (!member.scope === 'static') return;
+        return `<li data-type='${type}'>${linkto(member.longname, removeExports(member.name))}</li>`;
+    }).join("");
+
+    itemsNav += "</ul>";
+
+    return itemsNav;
+}
 function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
     var nav = '';
 
@@ -318,49 +334,9 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
             } else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
                 itemsNav += `<li file="${item.name.toLowerCase()}">` + linktoFn(item.longname, item.name.replace(/^module:/, ''));
 
-                if (members.length) {
-                    itemsNav += "<h4>Members</h4>";
-                    itemsNav += "<ul class='members'>";
-
-                    members.forEach(function (member) {
-                        if (!member.scope === 'static') return;
-                        itemsNav += "<li data-type='member'>";
-                        itemsNav += linkto(member.longname, member.name);
-                        itemsNav += "</li>";
-                    });
-
-                    itemsNav += "</ul>";
-                }
-
-                if (methods.length) {
-                    itemsNav += `<h4><a href="${item.longname}.html#methods">Methods</a></h4>`;
-                    itemsNav += "<ul class='methods'>";
-                    // methods.sort(method => {
-                    //     return method.inherits ? 1 : -1;
-                    // });
-                    methods.forEach(function (method) {
-                        itemsNav += `<li data-type='method' class="method ${method.inherits ? "inherits" : ""}">`;
-                        itemsNav += linkto(method.longname, removeExports(method.name));
-                        itemsNav += "</li>";
-                    });
-
-                    itemsNav += "</ul>";
-                }
-                if (events.length) {
-                    itemsNav += `<h4><a href="${item.longname}.html#events">Events</a></h4>`;
-                    itemsNav += "<ul class='events'>";
-                    // methods.sort(method => {
-                    //     return method.inherits ? 1 : -1;
-                    // });
-                    events.forEach(function (event) {
-                        itemsNav += `<li data-type='event' class="event">`;
-                        itemsNav += linkto(event.longname, event.name);
-                        itemsNav += "</li>";
-                    });
-
-                    itemsNav += "</ul>";
-                }
-
+                itemsNav += buildNavUl(item.longname, "Members", "member", members);
+                itemsNav += buildNavUl(item.longname, "Methods", "method", methods);
+                itemsNav += buildNavUl(item.longname, "Events", "event", events);
                 itemsNav += '</li>';
                 itemsSeen[item.longname] = true;
             }
@@ -412,24 +388,33 @@ function buildNav(members) {
     nav += buildMemberNav(members.tutorials, 'Tutorials', seenTutorials, linktoTutorial);
     nav += buildMemberNav(members.interfaces, 'Interfaces', seen, linkto);
 
-    // if (members.globals.length) {
-    //     var globalNav = '';
+    var globals = members.globals.filter(function(g) {
+        if ( g.kind !== 'typedef' && !hasOwnProp.call(seen, g.longname) ) {
+            // seen[g.longname] = true;
+            return true;
+        }
+        return false;
+    });
 
-    //     members.globals.forEach(function(g) {
-    //         if ( g.kind !== 'typedef' && !hasOwnProp.call(seen, g.longname) ) {
-    //             globalNav += '<li>' + linkto(g.longname, g.name) + '</li>';
-    //         }
-    //         seen[g.longname] = true;
-    //     });
+    if (globals.length) {
+        var methods = globals.filter(function(g) {
+            return g.kind === "function";
+        });
+        var members = globals.filter(function(g) {
+            return g.kind === "member";
+        });
+        var events = globals.filter(function(g) {
+            return g.kind === "event";
+        });
+        nav += `<ul class="global"><li file="global">${linkto("global", "Global")}`;
+        nav += buildNavUl("global", "Methods", "method", methods);
+        nav += buildNavUl("global", "Members", "member", members);
+        nav += buildNavUl("global", "Events", "event", events);
+        nav += `</li></ul>`;
+    }
 
-    //     if (!globalNav) {
-    //         // turn the heading into a link so you can actually get to the global page
-    //         nav += '<h3>' + linkto('global', 'Global') + '</h3>';
-    //     }
-    //     else {
-    //         nav += '<h3>Global</h3><ul>' + globalNav + '</ul>';
-    //     }
-    // }
+    
+    
 
     return nav;
 }
