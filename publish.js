@@ -389,7 +389,7 @@ function buildNav(members) {
     nav += buildMemberNav(members.interfaces, 'Interfaces', seen, linkto);
 
     var globals = members.globals.filter(function(g) {
-        if ( g.kind !== 'typedef' && !hasOwnProp.call(seen, g.longname) ) {
+        if (!hasOwnProp.call(seen, g.longname) ) {
             // seen[g.longname] = true;
             return true;
         }
@@ -406,7 +406,11 @@ function buildNav(members) {
         var events = globals.filter(function(g) {
             return g.kind === "event";
         });
+        var types = globals.filter(function(g) {
+            return g.kind === "typedef";
+        });
         nav += `<ul class="global"><li file="global">${linkto("global", "Global")}`;
+        nav += buildNavUl("global", "Type Definitions", "typedef", types);
         nav += buildNavUl("global", "Methods", "method", methods);
         nav += buildNavUl("global", "Members", "member", members);
         nav += buildNavUl("global", "Events", "event", events);
