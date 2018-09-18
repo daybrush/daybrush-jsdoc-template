@@ -316,7 +316,8 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
         var itemsNav = '';
 
         items.forEach(function(item) {
-            var methods = find({kind:'function', memberof: item.longname});
+            var methods = find({kind:'function', memberof: item.longname, scope: 'instance'});
+            var statics = find({kind:'function', memberof: item.longname, scope: 'static'});
             var members = find({kind:'member', memberof: item.longname});
             var events = find({kind:'event', memberof: item.longname});
             var docdash = env && env.conf && env.conf.docdash || {};
@@ -334,7 +335,8 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
             } else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
                 itemsNav += `<li file="${item.name.toLowerCase()}">` + linktoFn(item.longname, item.name.replace(/^module:/, ''));
 
-                itemsNav += buildNavUl(item.longname, "Members", "member", members);
+                itemsNav += buildNavUl(item.longname, "Static Members", "member", members);
+                itemsNav += buildNavUl(item.longname, "Static Methods", "method", statics);
                 itemsNav += buildNavUl(item.longname, "Methods", "method", methods);
                 itemsNav += buildNavUl(item.longname, "Events", "event", events);
                 itemsNav += '</li>';
