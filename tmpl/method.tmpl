@@ -8,7 +8,7 @@ var self = this;
     <?js } ?>
 
     <h4 class="name" id="<?js= id ?>"><?js= data.attribs + (kind === 'class' ? 'new ' : '') +
-    name.replace("exports.", "") + (data.signature || '') ?></h4>
+    name.replace("exports.", "") + (data.typeParameters ? data.typeParameters.html : "")+ (data.signature || '') ?></h4>
 
     <?js if (data.summary) { ?>
     <p class="summary"><?js= summary ?></p>
@@ -45,6 +45,26 @@ var self = this;
 <?js if (data.params && params.length) { ?>
     <?js= this.partial('params.tmpl', params) ?>
 <?js } ?>
+
+<?js
+if (data.extras) {
+    data.extras.forEach(function(info) {
+        var typeParameters = info.typeParameters;
+        var parameters = info.parameters;
+        var returnType = info.returnType;
+?>
+    <h4 class="name typescript" id="<?js= id ?>">
+        <?js= (kind === 'class' ? 'new ' : '') + name.replace("exports.", "") + typeParameters.html ?>
+        <span class="signature">(<?js=parameters.map(function (param) {return param.name}).join(", ")?>)</span>
+        <span class="type-signature"> → {<?js=returnType.html?>}</span>
+    </h4>
+    <div class="ts-params typescript">
+    <?js= self.partial('params.tmpl', parameters) ?>
+    </div>
+<?js
+    });
+}
+?>
 
 <?js if (data.examples && examples.length) { ?>
     <h5>Example<?js= examples.length > 1? 's':'' ?></h5>
