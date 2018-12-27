@@ -102,7 +102,7 @@ function updateItemName(item) {
 
 function addParamAttributes(params) {
     return params.filter(function(param) {
-        return param.name && param.name.indexOf('.') === -1;
+        return param.name;
     }).map(updateItemName);
 }
 
@@ -320,6 +320,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
             var statics = find({kind:'function', memberof: item.longname, scope: 'static'});
             var members = find({kind:'member', memberof: item.longname});
             var events = find({kind:'event', memberof: item.longname});
+            var defs = find({kind:'typedef', memberof: item.longname});
             var docdash = env && env.conf && env.conf.docdash || {};
 
 
@@ -330,15 +331,16 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
             }
 
             if ( !hasOwnProp.call(item, 'longname') ) {
-                itemsNav += `<li>` + linktoFn('', item.name);
+                itemsNav += `<li class="parent">` + linktoFn('', item.name);
                 itemsNav += '</li>';
             } else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
-                itemsNav += `<li file="${item.name.toLowerCase()}">` + linktoFn(item.longname, item.name.replace(/^module:/, ''));
+                itemsNav += `<li file="${item.name.toLowerCase()}" class="parent">` + linktoFn(item.longname, item.name.replace(/^module:/, ''));
 
                 itemsNav += buildNavUl(item.longname, "Static Members", "member", members);
                 itemsNav += buildNavUl(item.longname, "Static Methods", "method", statics);
                 itemsNav += buildNavUl(item.longname, "Methods", "method", methods);
                 itemsNav += buildNavUl(item.longname, "Events", "event", events);
+                itemsNav += buildNavUl(item.longname, "Type Definitions", "typddef", defs);
                 itemsNav += '</li>';
                 itemsSeen[item.longname] = true;
             }
@@ -378,6 +380,7 @@ function linktoExternal(longName, name) {
 
 function buildNav(members) {
     var nav = '<h2><a href="index.html">Home</a></h2>';
+    nav += '<div class="search"><div class="input-area"><input type="text"/></div><button></button></div>';
     var seen = {};
     var seenTutorials = {};
 
@@ -411,7 +414,7 @@ function buildNav(members) {
         var types = globals.filter(function(g) {
             return g.kind === "typedef";
         });
-        nav += `<ul class="global"><li file="global">${linkto("global", "Global")}`;
+        nav += `<ul class="global"><li file="global"  class="parent">${linkto("global", "Global")}`;
         nav += buildNavUl("global", "Type Definitions", "typedef", types);
         nav += buildNavUl("global", "Methods", "method", methods);
         nav += buildNavUl("global", "Members", "member", members);
