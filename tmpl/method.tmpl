@@ -54,8 +54,7 @@ if (data.extras) {
         var returnType = info.returnType;
 ?>
     <h4 class="name typescript" id="<?js= id ?>">
-        <?js= (kind === 'class' ? 'new ' : '') + name.replace("exports.", "") + typeParameters.html ?>
-        <span class="signature">(<?js=parameters.map(function (param) {return param.name}).join(", ")?>)</span>
+        <?js= (kind === 'class' ? 'new ' : '') + name.replace("exports.", "") + typeParameters.html ?><span class="signature">(<?js=parameters.map(function (param) {return param.name}).join(", ")?>)</span>
         <span class="type-signature"> → {<?js=returnType.html?>}</span>
     </h4>
     <div class="ts-params typescript">
