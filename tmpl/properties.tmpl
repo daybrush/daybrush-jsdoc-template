@@ -25,7 +25,7 @@
     props.forEach(function(prop) {
         if (!prop) { return; }
 
-        if (prop.optional || prop.nullable) {
+        if (prop.nullable) {
             props.hasAttributes = true;
         }
 
@@ -69,7 +69,7 @@
 
         <tr>
             <?js if (props.hasName) {?>
-                <td class="name"><code><?js= prop.name ?></code></td>
+                <td class="name"><code><?js= prop.name ?></code><?js if (prop.optional) { ?>?<?js } ?></td>
             <?js } ?>
 
             <td class="type">
@@ -80,10 +80,6 @@
 
             <?js if (props.hasAttributes) {?>
                 <td class="attributes">
-                <?js if (prop.optional) { ?>
-                    &lt;optional><br>
-                <?js } ?>
-
                 <?js if (prop.nullable) { ?>
                     &lt;nullable><br>
                 <?js } ?>
