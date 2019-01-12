@@ -380,6 +380,17 @@ function linktoExternal(longName, name) {
 
 function buildNav(members) {
     var nav = '<h2><a href="index.html">Home</a></h2>';
+    var docdash = env && env.conf && env.conf.docdash || {};
+    if(docdash.menu){
+        for(var menu in docdash.menu){
+            nav += '<h2 class="custom"><a ';
+            //add attributes
+            for(var attr in docdash.menu[menu]){
+                nav += attr+'="' + docdash.menu[menu][attr] + '" ';
+            }
+            nav += '>' + menu + '</a></h2>';
+        }
+    }
     nav += '<div class="search"><div class="input-area"><input type="text"/></div><button></button></div>';
     var seen = {};
     var seenTutorials = {};

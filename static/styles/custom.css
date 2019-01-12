@@ -111,12 +111,26 @@ nav.searching li h4, nav.searching li ul {
 	display: block!important;
 }
 
-nav.searching li li a {
+nav.searching .parent {
 	display: none;
 }
-nav.searching li .targeting {
+nav.searching .parent ul li a {
+	display: none;
+}
+
+nav.searching .parent.module-targeting {
 	display: block;
 }
-nav.searching li .targeting a, nav.searching li.targeting a {
+nav.searching .parent.module-targeting ul li a {
+	display: none;
+}
+nav.searching .parent.module-targeting ul li a.targeting {
 	display: block;
+}
+nav.searching .parent.targeting ul li a {
+	display: block;
+}
+
+nav>h2.custom>a {
+	margin:12px 10px;
 }

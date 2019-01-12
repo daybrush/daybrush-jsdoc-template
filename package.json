@@ -1,6 +1,6 @@
 {
   "name": "daybrush-jsdoc-template",
-  "version": "1.4.4",
+  "version": "1.5.0",
   "description": "A clean, responsive documentation template theme for JSDoc 3 inspired by lodash and minami",
   "main": "publish.js",
   "scripts": {
