@@ -55,7 +55,7 @@ if (data.extras) {
 ?>
     <h4 class="name typescript" id="<?js= id ?>">
         <?js= (kind === 'class' ? 'new ' : '') + name.replace("exports.", "") + typeParameters.html ?><span class="signature">(<?js=parameters.map(function (param) {return param.name}).join(", ")?>)</span>
-        <span class="type-signature"> → {<?js=returnType.html?>}</span>
+        <span class="type-signature"> → {<?js=self.linkto(returnType.typeId(data.filename))?>}</span>
     </h4>
     <div class="ts-params typescript">
     <?js= self.partial('params.tmpl', parameters) ?>
