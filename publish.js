@@ -334,7 +334,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
                 itemsNav += `<li class="parent">` + linktoFn('', item.name);
                 itemsNav += '</li>';
             } else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
-                itemsNav += `<li file="${item.name.toLowerCase()}" class="parent">` + linktoFn(item.longname, item.name.replace(/^module:/, ''));
+                itemsNav += `<li file="${item.name.toLowerCase()}" class="parent">` + linktoFn(item.longname, item.longname.replace(/^module:/, ''));
 
                 itemsNav += buildNavUl(item.longname, "Static Members", "member", members);
                 itemsNav += buildNavUl(item.longname, "Static Methods", "method", statics);
