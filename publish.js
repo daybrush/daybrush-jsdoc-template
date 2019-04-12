@@ -317,8 +317,9 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
 
         items.forEach(function(item) {
             var methods = find({kind:'function', memberof: item.longname, scope: 'instance'});
-            var statics = find({kind:'function', memberof: item.longname, scope: 'static'});
-            var members = find({kind:'member', memberof: item.longname});
+            var members = find({kind:'member', memberof: item.longname, scope: 'instance'});
+            var staticMethods = find({kind:'function', memberof: item.longname, scope: 'static'});
+            var staticMembers = find({kind:'member', memberof: item.longname, scope: 'static'});
             var events = find({kind:'event', memberof: item.longname});
             var defs = find({kind:'typedef', memberof: item.longname});
             var docdash = env && env.conf && env.conf.docdash || {};
@@ -336,8 +337,9 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
             } else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
                 itemsNav += `<li file="${item.name.toLowerCase()}" class="parent">` + linktoFn(item.longname, item.longname.replace(/^module:/, ''));
 
-                itemsNav += buildNavUl(item.longname, "Static Members", "member", members);
-                itemsNav += buildNavUl(item.longname, "Static Methods", "method", statics);
+                itemsNav += buildNavUl(item.longname, "Static Methods", "method", staticMethods);
+                itemsNav += buildNavUl(item.longname, "Static Members", "member", staticMembers);
+                itemsNav += buildNavUl(item.longname, "Members", "method", members);
                 itemsNav += buildNavUl(item.longname, "Methods", "method", methods);
                 itemsNav += buildNavUl(item.longname, "Events", "event", events);
                 itemsNav += buildNavUl(item.longname, "Type Definitions", "typddef", defs);
@@ -433,8 +435,8 @@ function buildNav(members) {
         nav += `</li></ul>`;
     }
 
-    
-    
+
+
 
     return nav;
 }
